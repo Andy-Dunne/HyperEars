@@ -364,6 +364,13 @@ sealed interface RfcommEndpointSpec : EarbudTransportSpec {
     data class ServiceUuid(
         val uuid: String,
         override val id: String,
+        /**
+         * Opens an unsecured channel: no authenticated pairing and no L2CAP security upgrade.
+         *
+         * Some devices accept an unauthenticated RFCOMM link and the secure flow would interrupt
+         * audio, so a vendor endpoint that does not require authentication declares this as false.
+         */
+        val secure: Boolean = true,
     ) : RfcommEndpointSpec
 
     data class Channel(
