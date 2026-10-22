@@ -148,7 +148,11 @@ internal object AndroidEarbudChannelFactory : EarbudChannelFactory {
         endpoint: RfcommEndpointSpec,
     ): BluetoothSocket = when (endpoint) {
         is RfcommEndpointSpec.ServiceUuid ->
-            device.createRfcommSocketToServiceRecord(UUID.fromString(endpoint.uuid))
+            if (endpoint.secure) {
+                device.createRfcommSocketToServiceRecord(UUID.fromString(endpoint.uuid))
+            } else {
+                device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(endpoint.uuid))
+            }
 
         is RfcommEndpointSpec.Channel -> {
             val methodName = if (endpoint.secure) {
